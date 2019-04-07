@@ -1,31 +1,13 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using UdemyIdentity.Models;
 
 namespace UdemyIdentity
 {
     public class Startup
     {
-        public IConfiguration configuration { get; }
-
-        public Startup(IConfiguration configuration)
-        {
-            this.configuration = configuration;
-        }
-
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AppIdentityDbContext>(opts =>
-            {
-                opts.UseSqlServer(configuration["ConnectionStrings:DefaultConnectionString"]);
-            });
-
-            services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppIdentityDbContext>();
-
             services.AddMvc();
         }
 
