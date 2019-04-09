@@ -22,7 +22,6 @@ namespace UdemyIdentity
             {
                 opts.UseSqlServer(configuration["ConnectionStrings:DefaultConnectionString"]);
             });
-
             services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<AppIdentityDbContext>();
 
             services.AddMvc();
