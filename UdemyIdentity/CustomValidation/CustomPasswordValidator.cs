@@ -13,7 +13,10 @@ namespace UdemyIdentity.CustomValidation
 
             if (password.ToLower().Contains(user.UserName.ToLower()))
             {
-                errors.Add(new IdentityError() { Code = "PasswordContainsUserName", Description = "şifre alanı kullanıcı adı içeremez" });
+                if (!user.Email.Contains(user.UserName))
+                {
+                    errors.Add(new IdentityError() { Code = "PasswordContainsUserName", Description = "şifre alanı kullanıcı adı içeremez" });
+                }
             }
 
             if (password.ToLower().Contains("1234"))
