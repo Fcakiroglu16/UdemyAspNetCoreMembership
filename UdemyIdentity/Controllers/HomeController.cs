@@ -9,10 +9,12 @@ namespace UdemyIdentity.Controllers
     public class HomeController : Controller
     {
         public UserManager<AppUser> userManager { get; }
+        public SignInManager<AppUser> signInManager { get; }
 
-        public HomeController(UserManager<AppUser> userManager)
+        public HomeController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
             this.userManager = userManager;
+            this.signInManager = signInManager;
         }
 
         public IActionResult Index()
@@ -20,9 +22,43 @@ namespace UdemyIdentity.Controllers
             return View();
         }
 
-        public IActionResult LogIn()
+        public IActionResult LogIn(string ReturnUrl)
         {
+            TempData["ReturnUrl"] = ReturnUrl;
+
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> LogIn(LoginViewModel userlogin)
+        {
+            if (ModelState.IsValid)
+            {
+                AppUser user = await userManager.FindByEmailAsync(userlogin.Email);
+
+                if (user != null)
+                {
+                    await signInManager.SignOutAsync();
+
+                    Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(user, userlogin.Password, userlogin.RememberMe, false);
+
+                    if (result.Succeeded)
+                    {
+                        if (TempData["ReturnUrl"] != null)
+                        {
+                            return Redirect(TempData["ReturnUrl"].ToString());
+                        }
+
+                        return RedirectToAction("Index", "Member");
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Geçersiz email adresi veya şifresi");
+                }
+            }
+
+            return View(userlogin);
         }
 
         public IActionResult SignUp()
