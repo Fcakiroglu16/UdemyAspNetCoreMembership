@@ -114,5 +114,10 @@ namespace UdemyIdentity.Controllers
 
             return View(passwordChangeViewModel);
         }
+
+        public void LogOut()
+        {
+            signInManager.SignOutAsync();
+        }
     }
 }
