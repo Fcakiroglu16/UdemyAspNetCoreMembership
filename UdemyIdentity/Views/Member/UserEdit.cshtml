@@ -14,7 +14,7 @@
 }
 <div class="row">
     <div class="col-md-12">
-        <form asp-action="UserEdit" method="post">
+        <form asp-action="UserEdit" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="UserName" class="control-label"></label>
@@ -30,6 +30,29 @@
                 <label asp-for="Email" class="control-label"></label>
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="BirthDay" class="control-label"></label>
+                <input asp-for="BirthDay" class="form-control" />
+                <span asp-validation-for="BirthDay" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="City" class="control-label"></label>
+                <input asp-for="City" class="form-control" />
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Gender" class="control-label"></label>
+                <select class="form-control" asp-for="Gender" asp-items="@ViewBag.Gender"></select>
+            </div>
+
+            <div class="form-group">
+
+                <label class="control-label">Resim</label>
+                <input class="form-control" type="file" name="userPicture" />
             </div>
 
             <div class="form-group">
