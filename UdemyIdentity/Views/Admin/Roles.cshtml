@@ -1,0 +1,27 @@
+﻿@model List<AppRole>
+
+@{
+    ViewData["Title"] = "Roles";
+    Layout = "~/Views/Admin/_AdminLayout.cshtml";
+}
+
+<h3>Roller</h3>
+<hr />
+<table class="table table table-bordered table-striped">
+    <tr>
+        <th>Id</th>
+        <th>Rol ismi</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <th>@item.Id</th>
+            <th>@item.Name</th>
+        </tr>
+
+    }
+</table>
+
+<a asp-action="RoleCreate" class="btn btn-info">Role Oluştur</a>
