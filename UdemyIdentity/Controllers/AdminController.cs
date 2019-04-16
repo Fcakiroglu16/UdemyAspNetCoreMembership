@@ -5,16 +5,18 @@ using UdemyIdentity.Models;
 
 namespace UdemyIdentity.Controllers
 {
-    public class AdminController : Controller
+    public class AdminController : BaseController
     {
-        private UserManager<AppUser> userManager { get; }
-
-        public AdminController(UserManager<AppUser> userManager)
+        public AdminController(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager) : base(userManager, null, roleManager)
         {
-            this.userManager = userManager;
         }
 
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        public IActionResult Users()
         {
             return View(userManager.Users.ToList());
         }
