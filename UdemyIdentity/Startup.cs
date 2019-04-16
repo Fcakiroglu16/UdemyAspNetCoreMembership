@@ -66,7 +66,7 @@ namespace UdemyIdentity
             app.UseStatusCodePages();
             app.UseStaticFiles();
             app.UseAuthentication();
-            app.UseMvcWithDefaultRoute();
+            app.UseMvcWithDefaultRoute(); // { controller}/{action}/id
         }
     }
 }

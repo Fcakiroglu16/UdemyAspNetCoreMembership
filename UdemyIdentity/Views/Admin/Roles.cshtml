@@ -7,18 +7,26 @@
 
 <h3>Roller</h3>
 <hr />
+
 <table class="table table table-bordered table-striped">
     <tr>
         <th>Id</th>
         <th>Rol ismi</th>
+        <th>Silme</th>
     </tr>
 
     @foreach (var item in Model)
     {
         <tr>
 
-            <th>@item.Id</th>
-            <th>@item.Name</th>
+            <td>@item.Id</td>
+            <td>@item.Name</td>
+            <td>
+                <form asp-action="RoleDelete" asp-route-id="@item.Id" method="post">
+
+                    <button class="btn btn-success" type="submit">sil</button>
+                </form>
+            </td>
         </tr>
 
     }
