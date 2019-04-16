@@ -13,6 +13,7 @@
         <th>Id</th>
         <th>Rol ismi</th>
         <th>Silme</th>
+        <th>Güncelleme</th>
     </tr>
 
     @foreach (var item in Model)
@@ -27,6 +28,7 @@
                     <button class="btn btn-success" type="submit">sil</button>
                 </form>
             </td>
+            <td><a class="btn btn-info" asp-action="RoleUpdate" asp-route-id="@item.Id">Güncelle</a></td>
         </tr>
 
     }

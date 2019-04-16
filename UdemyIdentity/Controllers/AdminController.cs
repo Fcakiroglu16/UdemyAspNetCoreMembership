@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Mapster;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using UdemyIdentity.Models;
@@ -61,6 +62,45 @@ namespace UdemyIdentity.Controllers
             }
 
             return RedirectToAction("Roles");
+        }
+
+        public IActionResult RoleUpdate(string id)
+        {
+            AppRole role = roleManager.FindByIdAsync(id).Result;
+
+            if (role != null)
+            {
+                return View(role.Adapt<RoleViewModel>());
+            }
+
+            return RedirectToAction("Roles");
+        }
+
+        [HttpPost]
+        public IActionResult RoleUpdate(RoleViewModel roleViewModel)
+        {
+            AppRole role = roleManager.FindByIdAsync(roleViewModel.Id).Result;
+
+            if (role != null)
+            {
+                role.Name = roleViewModel.Name;
+                IdentityResult result = roleManager.UpdateAsync(role).Result;
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Roles");
+                }
+                else
+                {
+                    AddModelError(result);
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "Güncelleme işlemi başarısız oldu.");
+            }
+
+            return View(roleViewModel);
         }
     }
 }
