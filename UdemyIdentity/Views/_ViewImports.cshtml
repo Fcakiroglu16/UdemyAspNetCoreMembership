@@ -1,3 +1,4 @@
 ﻿@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
-@using UdemyIdentity.Models
-@using UdemyIdentity.ViewModes
+@addTagHelper UdemyIdentity.CustomTagHelpers.*,UdemyIdentity
+    @using UdemyIdentity.Models
+    @using UdemyIdentity.ViewModes
