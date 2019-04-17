@@ -27,11 +27,32 @@
             </tr>
             <tr>
                 <th>City</th>
-                <td>@Model.City</td>
+                <td>
+                    @if (!String.IsNullOrEmpty(Model.City))
+                    {
+                        @Model.City
+                    }
+                    else
+
+                    {
+                        <span>belirtilmemiş</span>
+                    }
+                </td>
             </tr>
             <tr>
                 <th>Doğum tarihi</th>
-                <td>@Model.BirthDay.Value.ToShortDateString()</td>
+                <td>
+
+                    @if (Model.BirthDay != null)
+                    {
+                        @Model.BirthDay?.ToShortDateString()
+                    }
+                    else
+
+                    {
+                        <span>belirtilmemiş</span>
+                    }
+                </td>
             </tr>
 
             <tr>

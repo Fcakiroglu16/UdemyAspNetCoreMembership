@@ -139,5 +139,17 @@ namespace UdemyIdentity.Controllers
         {
             return View();
         }
+
+        [Authorize(Roles = "manager,admin")]
+        public IActionResult Manager()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "editor,admin")]
+        public IActionResult Editor()
+        {
+            return View();
+        }
     }
 }
