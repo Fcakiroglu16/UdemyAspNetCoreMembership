@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.IO;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using UdemyIdentity.Enums;
 using UdemyIdentity.Models;
@@ -137,13 +138,17 @@ namespace UdemyIdentity.Controllers
 
         public IActionResult AccessDenied(string ReturnUrl)
         {
-            if (ReturnUrl.Contains("ViolencePage"))
+            if (ReturnUrl.ToLower().Contains("violencegage"))
             {
                 ViewBag.message = "Erişmeye çalıştığınız sayfa şiddet videoları içerdiğinden dolayı 15 yaşında büyük olmanız gerekmektedir";
             }
-            else if (ReturnUrl.Contains("AnkaraPage"))
+            else if (ReturnUrl.ToLower().Contains("ankarapage"))
             {
                 ViewBag.message = "Bu sayfaya sadece şehir alanı ankara olan kullanıcılar erişebilir";
+            }
+            else if (ReturnUrl.ToLower().Contains("exchange"))
+            {
+                ViewBag.message = "30 günlük ücretsiz deneme hakkınız sona ermiştir.";
             }
             else
             {
@@ -173,6 +178,29 @@ namespace UdemyIdentity.Controllers
 
         [Authorize(Policy = "ViolencePolicy")]
         public IActionResult ViolencePage()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> ExchangeRedirect()
+        {
+            bool result = User.HasClaim(x => x.Type == "ExpireDateExchange");
+
+            if (!result)
+            {
+                Claim ExpireDateExchange = new Claim("ExpireDateExchange", DateTime.Now.AddDays(30).Date.ToShortDateString(), ClaimValueTypes.String, "Internal");
+
+                await userManager.AddClaimAsync(CurrentUser, ExpireDateExchange);
+
+                await signInManager.SignOutAsync();
+                await signInManager.SignInAsync(CurrentUser, true);
+            }
+
+            return RedirectToAction("Exchange");
+        }
+
+        [Authorize(Policy = "ExchangePolicy")]
+        public IActionResult Exchange()
         {
             return View();
         }

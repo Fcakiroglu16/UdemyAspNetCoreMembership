@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -22,6 +23,7 @@ namespace UdemyIdentity
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IAuthorizationHandler, ExpireDateExchangeHandler>();
             services.AddDbContext<AppIdentityDbContext>(opts =>
             {
                 opts.UseSqlServer(configuration["ConnectionStrings:DefaultConnectionString"]);
@@ -33,9 +35,14 @@ namespace UdemyIdentity
                 {
                     policy.RequireClaim("city", "ankara");
                 });
-                opts.AddPolicy("ViolencePolicy", polic =>
+
+                opts.AddPolicy("ViolencePolicy", policy =>
                 {
-                    polic.RequireClaim("violence");
+                    policy.RequireClaim("violence");
+                });
+                opts.AddPolicy("ExchangePolicy", policy =>
+                {
+                    policy.AddRequirements(new ExpireDateExchangeRequirement());
                 });
             });
 
