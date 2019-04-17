@@ -4,7 +4,7 @@ namespace UdemyIdentity.Helper
 {
     public static class PasswordReset
     {
-        public static void PasswordResetSendEmail(string link)
+        public static void PasswordResetSendEmail(string link, string email)
 
         {
             MailMessage mail = new MailMessage();
@@ -12,7 +12,7 @@ namespace UdemyIdentity.Helper
             SmtpClient smtpClient = new SmtpClient("mail.teknohub.net");
 
             mail.From = new MailAddress("fcakiroglu@teknohub.net");
-            mail.To.Add("f-cakiroglu@outlook.com");
+            mail.To.Add(email);
 
             mail.Subject = $"www.bıdıbı.com::Şifre sıfırlama";
             mail.Body = "<h2>Şifrenizi yenilemek için lütfen aşağıdaki linke tıklayınız.</h2><hr/>";
