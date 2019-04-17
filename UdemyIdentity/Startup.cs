@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -24,6 +25,14 @@ namespace UdemyIdentity
             services.AddDbContext<AppIdentityDbContext>(opts =>
             {
                 opts.UseSqlServer(configuration["ConnectionStrings:DefaultConnectionString"]);
+            });
+
+            services.AddAuthorization(opts =>
+            {
+                opts.AddPolicy("AnkaraPolicy", policy =>
+                {
+                    policy.RequireClaim("city", "ankara");
+                });
             });
 
             services.AddIdentity<AppUser, AppRole>(opts =>
@@ -56,6 +65,9 @@ namespace UdemyIdentity
                 opts.ExpireTimeSpan = System.TimeSpan.FromDays(60);
                 opts.AccessDeniedPath = new PathString("/Member/AccessDenied");
             });
+
+            services.AddScoped<IClaimsTransformation, ClaimProvider.ClaimProvider>();
+
             services.AddMvc();
         }
 
