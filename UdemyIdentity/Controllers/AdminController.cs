@@ -22,6 +22,11 @@ namespace UdemyIdentity.Controllers
             return View();
         }
 
+        public IActionResult Claims()
+        {
+            return View(User.Claims.ToList());
+        }
+
         public IActionResult RoleCreate()
         {
             return View();
