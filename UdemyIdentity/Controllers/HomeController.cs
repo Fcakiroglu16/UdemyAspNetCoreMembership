@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using UdemyIdentity.Models;
 using UdemyIdentity.ViewModes;
@@ -225,6 +226,77 @@ namespace UdemyIdentity.Controllers
                 ViewBag.status = "Bir hata meydana geldi. lütfen daha sonra tekrar deneyiniz.";
             }
             return View();
+        }
+
+        public IActionResult FacebookLogin(string ReturnUrl)
+
+        {
+            string RedirectUrl = Url.Action("ExternalResponse", "Home", new { ReturnUrl = ReturnUrl });
+
+            var properties = signInManager.ConfigureExternalAuthenticationProperties("Facebook", RedirectUrl);
+
+            return new ChallengeResult("Facebook", properties);
+        }
+
+        public async Task<IActionResult> ExternalResponse(string ReturnUrl = "/")
+        {
+            ExternalLoginInfo info = await signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+                return RedirectToAction("LogIn");
+            }
+            else
+            {
+                Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, true);
+
+                if (result.Succeeded)
+                {
+                    return Redirect(ReturnUrl);
+                }
+                else
+                {
+                    AppUser user = new AppUser();
+
+                    user.Email = info.Principal.FindFirst(ClaimTypes.Email).Value;
+                    string ExternalUserId = info.Principal.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+                    if (info.Principal.HasClaim(x => x.Type == ClaimTypes.Name))
+                    {
+                        string userName = info.Principal.FindFirst(ClaimTypes.Name).Value;
+
+                        userName = userName.Replace(' ', '-').ToLower() + ExternalUserId.Substring(0, 5).ToString();
+
+                        user.UserName = userName;
+                    }
+                    else
+                    {
+                        user.UserName = info.Principal.FindFirst(ClaimTypes.Email).Value;
+                    }
+
+                    IdentityResult createResult = await userManager.CreateAsync(user);
+
+                    if (createResult.Succeeded)
+                    {
+                        IdentityResult loginResult = await userManager.AddLoginAsync(user, info);
+
+                        if (loginResult.Succeeded)
+                        {
+                            await signInManager.SignInAsync(user, true);
+                            return Redirect(ReturnUrl);
+                        }
+                        else
+                        {
+                            AddModelError(loginResult);
+                        }
+                    }
+                    else
+                    {
+                        AddModelError(createResult);
+                    }
+                }
+            }
+
+            return RedirectToAction("Error");
         }
     }
 }
