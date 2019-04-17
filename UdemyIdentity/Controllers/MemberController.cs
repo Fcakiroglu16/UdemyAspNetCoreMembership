@@ -135,8 +135,21 @@ namespace UdemyIdentity.Controllers
             signInManager.SignOutAsync();
         }
 
-        public IActionResult AccessDenied()
+        public IActionResult AccessDenied(string ReturnUrl)
         {
+            if (ReturnUrl.Contains("ViolencePage"))
+            {
+                ViewBag.message = "Erişmeye çalıştığınız sayfa şiddet videoları içerdiğinden dolayı 15 yaşında büyük olmanız gerekmektedir";
+            }
+            else if (ReturnUrl.Contains("AnkaraPage"))
+            {
+                ViewBag.message = "Bu sayfaya sadece şehir alanı ankara olan kullanıcılar erişebilir";
+            }
+            else
+            {
+                ViewBag.message = "Bu sayfaya erişim izniniz yoktur. Erişim izni almak için site yöneticisiyle görüşünüz";
+            }
+
             return View();
         }
 
@@ -154,6 +167,12 @@ namespace UdemyIdentity.Controllers
 
         [Authorize(Policy = "AnkaraPolicy")]
         public IActionResult AnkaraPage()
+        {
+            return View();
+        }
+
+        [Authorize(Policy = "ViolencePolicy")]
+        public IActionResult ViolencePage()
         {
             return View();
         }

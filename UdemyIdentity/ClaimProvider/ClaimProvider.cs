@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
+using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using UdemyIdentity.Models;
@@ -25,6 +26,19 @@ namespace UdemyIdentity.ClaimProvider
 
                 if (user != null)
                 {
+                    if (user.BirthDay != null)
+                    {
+                        var today = DateTime.Today;
+                        var age = today.Year - user.BirthDay?.Year;
+
+                        if (age > 15)
+                        {
+                            Claim ViolenceClaim = new Claim("violence", true.ToString(), ClaimValueTypes.String, "Internal");
+
+                            identity.AddClaim(ViolenceClaim);
+                        }
+                    }
+
                     if (user.City != null)
                     {
                         if (!principal.HasClaim(c => c.Type == "city"))

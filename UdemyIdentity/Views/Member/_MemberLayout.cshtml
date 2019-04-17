@@ -36,10 +36,6 @@
                     <li class="nav-item">
                         <a class="btn btn-info" asp-action="Manager" asp-controller="Member">Manager ana sayfa</a>
                     </li>
-
-                    <li class="nav-item">
-                        <a class="btn btn-danger" asp-action="AnkaraPage" asp-controller="Member">Ankara sayfası</a>
-                    </li>
                 </ul>
             </div>
         </div>
@@ -52,6 +48,10 @@
             </div>
             <div class="col-md-4">
                 <h3>Menü</h3>
+
+                <a class="btn btn-danger btn-block" asp-action="AnkaraPage" asp-controller="Member">Ankara sayfa</a>
+
+                <a class="btn btn-danger btn-block" asp-action="ViolencePage" asp-controller="Member">Şiddet içeren sayfa</a>
 
                 <a class="btn btn-info btn-block" asp-action="PasswordChange" asp-controller="Member">Şifre değiştirme</a>
 

@@ -33,6 +33,10 @@ namespace UdemyIdentity
                 {
                     policy.RequireClaim("city", "ankara");
                 });
+                opts.AddPolicy("ViolencePolicy", polic =>
+                {
+                    polic.RequireClaim("violence");
+                });
             });
 
             services.AddIdentity<AppUser, AppRole>(opts =>
