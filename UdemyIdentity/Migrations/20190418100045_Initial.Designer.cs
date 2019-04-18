@@ -10,8 +10,8 @@ using UdemyIdentity.Models;
 namespace UdemyIdentity.Migrations
 {
     [DbContext(typeof(AppIdentityDbContext))]
-    [Migration("20190415150856_AddCity")]
-    partial class AddCity
+    [Migration("20190418100045_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -138,6 +138,8 @@ namespace UdemyIdentity.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
+                    b.Property<DateTime?>("BirthDay");
+
                     b.Property<string>("City");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -147,6 +149,8 @@ namespace UdemyIdentity.Migrations
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
+
+                    b.Property<int>("Gender");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -163,6 +167,8 @@ namespace UdemyIdentity.Migrations
                     b.Property<string>("PhoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<string>("Picture");
 
                     b.Property<string>("SecurityStamp");
 

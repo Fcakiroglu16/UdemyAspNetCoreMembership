@@ -26,7 +26,8 @@ namespace UdemyIdentity
             services.AddTransient<IAuthorizationHandler, ExpireDateExchangeHandler>();
             services.AddDbContext<AppIdentityDbContext>(opts =>
             {
-                opts.UseSqlServer(configuration["ConnectionStrings:DefaultConnectionString"]);
+                //  opts.UseSqlServer(configuration["ConnectionStrings:DefaultConnectionString"]);
+                opts.UseSqlServer(configuration["ConnectionStrings:DefaultAzureConnectionString"]);
             });
 
             services.AddAuthorization(opts =>
