@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using UdemyIdentity.Models;
@@ -281,7 +283,10 @@ namespace UdemyIdentity.Controllers
 
                         if (loginResult.Succeeded)
                         {
-                            await signInManager.SignInAsync(user, true);
+                            //     await signInManager.SignInAsync(user, true);
+
+                            await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, true);
+
                             return Redirect(ReturnUrl);
                         }
                         else
@@ -296,7 +301,14 @@ namespace UdemyIdentity.Controllers
                 }
             }
 
-            return RedirectToAction("Error");
+            List<string> errors = ModelState.Values.SelectMany(x => x.Errors).Select(y => y.ErrorMessage).ToList();
+
+            return View("Error", errors);
+        }
+
+        public ActionResult Error()
+        {
+            return View();
         }
     }
 }
