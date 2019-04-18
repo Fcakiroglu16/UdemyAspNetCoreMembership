@@ -55,6 +55,10 @@ namespace UdemyIdentity
                 opts.ClientId = configuration["Authentication:Google:ClientID"];
 
                 opts.ClientSecret = configuration["Authentication:Google:ClientSecret"];
+            }).AddMicrosoftAccount(opts =>
+            {
+                opts.ClientId = configuration["Authentication:Microsoft:ClientId"];
+                opts.ClientSecret = configuration["Authentication:Microsoft:ClientSecret"];
             });
 
             services.AddIdentity<AppUser, AppRole>(opts =>
