@@ -240,6 +240,16 @@ namespace UdemyIdentity.Controllers
             return new ChallengeResult("Facebook", properties);
         }
 
+        public IActionResult GoogleLogin(string ReturnUrl)
+
+        {
+            string RedirectUrl = Url.Action("ExternalResponse", "Home", new { ReturnUrl = ReturnUrl });
+
+            var properties = signInManager.ConfigureExternalAuthenticationProperties("Google", RedirectUrl);
+
+            return new ChallengeResult("Google", properties);
+        }
+
         public async Task<IActionResult> ExternalResponse(string ReturnUrl = "/")
         {
             ExternalLoginInfo info = await signInManager.GetExternalLoginInfoAsync();

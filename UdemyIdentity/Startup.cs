@@ -50,6 +50,11 @@ namespace UdemyIdentity
             {
                 opts.AppId = configuration["Authentication:Facebook:AppId"];
                 opts.AppSecret = configuration["Authentication:Facebook:AppSecret"];
+            }).AddGoogle(opts =>
+            {
+                opts.ClientId = configuration["Authentication:Google:ClientID"];
+
+                opts.ClientSecret = configuration["Authentication:Google:ClientSecret"];
             });
 
             services.AddIdentity<AppUser, AppRole>(opts =>
