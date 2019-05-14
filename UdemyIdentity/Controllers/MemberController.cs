@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.IO;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using UdemyIdentity.Enums;
@@ -49,6 +50,17 @@ namespace UdemyIdentity.Controllers
             {
                 AppUser user = CurrentUser;
 
+                string phone = userManager.GetPhoneNumberAsync(user).Result;
+
+                if (phone != userViewModel.PhoneNumber)
+                {
+                    if (userManager.Users.Any(u => u.PhoneNumber == userViewModel.PhoneNumber))
+                    {
+                        ModelState.AddModelError("", "Bu telefon numarası başka üye tarafından kullanılmaktadır.");
+                        return View(userViewModel);
+                    }
+                }
+
                 if (userPicture != null && userPicture.Length > 0)
                 {
                     var fileName = Guid.NewGuid().ToString() + Path.GetExtension(userPicture.FileName);
@@ -66,6 +78,7 @@ namespace UdemyIdentity.Controllers
                 user.UserName = userViewModel.UserName;
                 user.Email = userViewModel.Email;
                 user.PhoneNumber = userViewModel.PhoneNumber;
+
                 user.City = userViewModel.City;
 
                 user.BirthDay = userViewModel.BirthDay;

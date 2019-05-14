@@ -107,6 +107,12 @@ namespace UdemyIdentity.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (userManager.Users.Any(u => u.PhoneNumber == userViewModel.PhoneNumber))
+                {
+                    ModelState.AddModelError("", "Bu telefon numarası kayıtlıdır.");
+                    return View(userViewModel);
+                }
+
                 AppUser user = new AppUser();
                 user.UserName = userViewModel.UserName;
                 user.Email = userViewModel.Email;
