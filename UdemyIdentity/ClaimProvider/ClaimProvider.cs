@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using UdemyIdentity.Models;
@@ -26,6 +28,20 @@ namespace UdemyIdentity.ClaimProvider
 
                 if (user != null)
                 {
+                    List<Claim> claims = identity.Claims.Where(x => x.Type == "editor-permission").ToList();
+
+                    claims.ForEach(c => identity.RemoveClaim(c));
+
+                    foreach (var item in claims.ToList())
+                    {
+                        int count = claims.Count(x => x.Type == item.Type && x.Value == item.Value);
+                        if (count == 2)
+                        {
+                            identity.AddClaim(item);
+                            claims.Remove(item);
+                        }
+                    }
+
                     if (user.BirthDay != null)
                     {
                         var today = DateTime.Today;

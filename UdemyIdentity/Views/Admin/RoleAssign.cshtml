@@ -15,7 +15,7 @@
         <div class="form-check">
             <input asp-for="@Model[i].Exist" type="checkbox" class="form-check-input" />
             <label asp-for="@Model[i].RoleId" class="form-check-label">@Model[i].RoleName</label>
-
+            <a asp-controller="Admin" asp-action="RoleClaimAssign" asp-route-id="@Model[i].RoleId.ToString()">alt rol ata</a>
             <input asp-for="@Model[i].RoleName" type="hidden" />
             <input asp-for="@Model[i].RoleId" type="hidden" />
         </div>
