@@ -163,5 +163,27 @@ namespace UdemyIdentity.Controllers
 
             return RedirectToAction("Users");
         }
+
+        public async Task<IActionResult> ResetUserPassword(string id)
+        {
+            AppUser user = await userManager.FindByIdAsync(id);
+
+            PasswordResetViewModelByAdmin passwordResetViewModelByAdmin = new PasswordResetViewModelByAdmin();
+
+            passwordResetViewModelByAdmin.UserId = user.Id;
+
+            return View(passwordResetViewModelByAdmin);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetUserPassword(PasswordResetViewModelByAdmin passwordResetViewModelByAdmin)
+        {
+            AppUser user = await userManager.FindByIdAsync(passwordResetViewModelByAdmin.UserId);
+
+            string token = await userManager.GeneratePasswordResetTokenAsync(user);
+
+            await userManager.ResetPasswordAsync(user, token, passwordResetViewModelByAdmin.NewPassword);
+            return RedirectToAction("Users");
+        }
     }
 }

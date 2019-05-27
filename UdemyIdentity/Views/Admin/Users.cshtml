@@ -14,6 +14,7 @@
         <td>Email</td>
         <td>Roller</td>
         <td>Rol Atama</td>
+        <td>Şifre yenileme</td>
     </tr>
     @if (Model.Count() == 0)
     {
@@ -32,6 +33,8 @@
                 <td>@item.Email</td>
                 <td user-roles="@item.Id"></td>
                 <td> <a class="btn btn-success" asp-action="RoleAssign" asp-route-id="@item.Id">Role ata</a></td>
+
+                <td> <a class="btn btn-success" asp-action="ResetUserPassword" asp-route-id="@item.Id">Şifre yenileme</a></td>
             </tr>
         }
 
