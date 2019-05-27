@@ -183,6 +183,9 @@ namespace UdemyIdentity.Controllers
             string token = await userManager.GeneratePasswordResetTokenAsync(user);
 
             await userManager.ResetPasswordAsync(user, token, passwordResetViewModelByAdmin.NewPassword);
+
+            await userManager.UpdateSecurityStampAsync(user);
+
             return RedirectToAction("Users");
         }
     }
