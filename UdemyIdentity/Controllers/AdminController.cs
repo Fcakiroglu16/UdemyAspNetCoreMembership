@@ -163,5 +163,34 @@ namespace UdemyIdentity.Controllers
 
             return RedirectToAction("Users");
         }
+
+        public async Task<IActionResult> ResetUserPassword(string id)
+        {
+            AppUser user = await userManager.FindByIdAsync(id);
+
+            PasswordResetByAdminViewModel passwordResetByAdminViewModel = new PasswordResetByAdminViewModel();
+            passwordResetByAdminViewModel.UserId = user.Id;
+
+            return View(passwordResetByAdminViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetUserPassword(PasswordResetByAdminViewModel passwordResetByAdminViewModel)
+        {
+            AppUser user = await userManager.FindByIdAsync(passwordResetByAdminViewModel.UserId);
+
+            string token = await userManager.GeneratePasswordResetTokenAsync(user);
+
+            await userManager.ResetPasswordAsync(user, token, passwordResetByAdminViewModel.NewPassword);
+
+            await userManager.UpdateSecurityStampAsync(user);
+
+            //securitystamp degerini  update etmezsem kullanıcı eski şifresiyle sitemizde dolaşmaya devam eder ne zaman çıkış yaparsa ozaman tekrar yeni şifreyle girmek zorunda
+            //eger update edersen kullanıcı  otomatik olarak  sitemize girdiği zaman login ekranına yönlendirilecek.
+
+            //Identity Mimarisi cookie tarafındaki securitystamp ile veritabanındaki security stamp değerini her 30 dakikada bir kontrol eder. Kullanıcı eski şifreyle en fazla server da session açıldıktan sonra 30 dakkika gezebilir. Bunu isterseniz 1 dakkikaya indirebilirsiniz. ama tavsiye edilmez. her bir dakika da  her kullanıcı için veritabanı kontrolü  yük getirir.
+
+            return RedirectToAction("Users");
+        }
     }
 }
