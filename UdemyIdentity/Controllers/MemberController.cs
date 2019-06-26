@@ -110,7 +110,7 @@ namespace UdemyIdentity.Controllers
         }
 
         [HttpPost]
-        public IActionResult PasswordChange(PasswordChangeViewModel passwordChangeViewModel)
+        public async Task<IActionResult> PasswordChange(PasswordChangeViewModel passwordChangeViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -124,9 +124,10 @@ namespace UdemyIdentity.Controllers
 
                     if (result.Succeeded)
                     {
-                        userManager.UpdateSecurityStampAsync(user);
-                        signInManager.SignOutAsync();
-                        signInManager.PasswordSignInAsync(user, passwordChangeViewModel.PasswordNew, true, false);
+                        await userManager.UpdateSecurityStampAsync(user);
+                        await signInManager.SignOutAsync();
+
+                        await signInManager.PasswordSignInAsync(user, passwordChangeViewModel.PasswordNew, true, false);
 
                         ViewBag.success = "true";
                     }
