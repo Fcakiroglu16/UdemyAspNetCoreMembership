@@ -19,7 +19,7 @@ namespace UdemyIdentity.Helper
             mail.Body += $"<a href='{link}'>email doğrulama linki</a>";
             mail.IsBodyHtml = true;
             smtpClient.Port = 587;
-            smtpClient.Credentials = new System.Net.NetworkCredential("fcakiroglu@teknohub.net", "FatihFatih30");
+            smtpClient.Credentials = new System.Net.NetworkCredential("fcakiroglu@teknohub.net", "FatihFatih10");
 
             smtpClient.Send(mail);
         }

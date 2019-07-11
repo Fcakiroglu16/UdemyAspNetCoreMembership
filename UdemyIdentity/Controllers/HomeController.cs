@@ -147,37 +147,45 @@ namespace UdemyIdentity.Controllers
 
         public IActionResult ResetPassword()
         {
+            TempData["durum"] = null;
             return View();
         }
 
         [HttpPost]
         public IActionResult ResetPassword(PasswordResetViewModel passwordResetViewModel)
         {
-            AppUser user = userManager.FindByEmailAsync(passwordResetViewModel.Email).Result;
-
-            if (user != null)
-
+            if (TempData["durum"] == null)
             {
-                string passwordResetToken = userManager.GeneratePasswordResetTokenAsync(user).Result;
+                AppUser user = userManager.FindByEmailAsync(passwordResetViewModel.Email).Result;
 
-                string passwordResetLink = Url.Action("ResetPasswordConfirm", "Home", new
+                if (user != null)
+
                 {
-                    userId = user.Id,
-                    token = passwordResetToken
-                }, HttpContext.Request.Scheme);
+                    string passwordResetToken = userManager.GeneratePasswordResetTokenAsync(user).Result;
 
-                //  www.bıdıbıdı.com/Home/ResetPasswordConfirm?userId=sdjfsjf&token=dfjkdjfdjf
+                    string passwordResetLink = Url.Action("ResetPasswordConfirm", "Home", new
+                    {
+                        userId = user.Id,
+                        token = passwordResetToken
+                    }, HttpContext.Request.Scheme);
 
-                Helper.PasswordReset.PasswordResetSendEmail(passwordResetLink, user.Email);
+                    //  www.bıdıbıdı.com/Home/ResetPasswordConfirm?userId=sdjfsjf&token=dfjkdjfdjf
 
-                ViewBag.status = "success";
+                    Helper.PasswordReset.PasswordResetSendEmail(passwordResetLink, user.Email);
+
+                    ViewBag.status = "success";
+                    TempData["durum"] = true.ToString();
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Sistemde kayıtlı email adresi bulunamamıştır.");
+                }
+                return View(passwordResetViewModel);
             }
             else
             {
-                ModelState.AddModelError("", "Sistemde kayıtlı email adresi bulunamamıştır.");
+                return RedirectToAction("ResetPassword");
             }
-
-            return View(passwordResetViewModel);
         }
 
         public IActionResult ResetPasswordConfirm(string userId, string token)
