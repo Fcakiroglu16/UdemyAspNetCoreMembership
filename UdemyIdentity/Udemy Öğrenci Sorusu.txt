@@ -1,0 +1,9 @@
+﻿Benim Identity sistemimde bir kullanıcı sadece bir role sahip olabilecektir. Bu kursta gördüğüm uygulamayı biraz değiştirerek kendi projeme entegre ettim. Fakat bir noktada tıkandım, basit bir şey ama ilk defa uyguladığım için bir türlü geçemedim. 
+
+Ben bir kullanıcının sadece bir role sahip olmasını istiyorum. Kurstaki RoleAssign sayfasında checkbox listesi değil de dropdownlist olacak. Kullanıcı hangi role sahipse o seçili gelecek. Kaydet deyince metodun postunda gelen seçili role kullanıcının rolü olarak atanacak.
+
+1) RoleAssign metodunun get olanında seleclist'i nasıl dolduracağım tüm rollerle, kullanıcının rolü hangisi ise onu seçili olarak nasıl viewbag içerisine ekleyeceğim. Bir satırlık kod tahminimce ama bulamadım işte.(Kullanıcının Id bilgisi get metoduna geliyor)
+
+2) RoleAssign View'inde kullanıcının rolü seçili olrak dropdownlist içerisinde gelecek. Bende kaydet dediğimde post metoduna gidecek. Post metodunda kullanıcının rollerini nasıl kaldıracağım yeni rolü nasıl ekleyeceğim. Burada pek tıkanmadım ama önemli olan buraya kadar gelebilmem. Bunun da kısa kodu varsa iyi olur. 
+
+Vaktiniz varsa yardımcı olabilirseniz çok ama çok sevinirim. İyi akşamlar.

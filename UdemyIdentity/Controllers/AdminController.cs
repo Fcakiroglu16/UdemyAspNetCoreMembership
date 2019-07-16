@@ -1,6 +1,7 @@
 ﻿using Mapster;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -140,26 +141,25 @@ namespace UdemyIdentity.Controllers
                 roleAssignViewModels.Add(r);
             }
 
-            return View(roleAssignViewModels);
+            var s = new SelectList(roleAssignViewModels, "RoleId", "RoleName", roleAssignViewModels.First(x => x.Exist == true).RoleId);
+            var a = new SelectList()
+            return View(s);
         }
 
         [HttpPost]
-        public async Task<IActionResult> RoleAssign(List<RoleAssignViewModel> roleAssignViewModels)
+        public async Task<IActionResult> RoleAssign()
         {
+            var userRoleId = Request.Form["userrole"];
+
             AppUser user = userManager.FindByIdAsync(TempData["userId"].ToString()).Result;
 
-            foreach (var item in roleAssignViewModels)
-            {
-                if (item.Exist)
+            AppRole role = await roleManager.FindByIdAsync(userRoleId);
 
-                {
-                    await userManager.AddToRoleAsync(user, item.RoleName);
-                }
-                else
-                {
-                    await userManager.RemoveFromRoleAsync(user, item.RoleName);
-                }
-            }
+            List<string> userRoleNames = userManager.GetRolesAsync(user).Result as List<string>;
+
+            await userManager.RemoveFromRolesAsync(user, userRoleNames);
+
+            await userManager.AddToRoleAsync(user, role.Name);
 
             return RedirectToAction("Users");
         }
