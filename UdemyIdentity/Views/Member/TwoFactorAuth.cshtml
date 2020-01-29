@@ -44,4 +44,22 @@
         </div>
 
     }
+
+    @if (TempData["recoveryCodes"] != null)
+    {
+        <div class="col-md-12">
+
+            <div class="alert alert-info">
+                Aşağıdaki kodları güvenli bir yerde saklayınız. Microsoft/Google Authenticator uygulamasını kullanamadığınız durumlarda bu kurtarma kodlarını kullanabilirsiniz.
+            </div>
+
+            <div class="alert alert-secondary">
+                @foreach (var item in TempData["recoveryCodes"] as string[])
+                {
+                    <strong>@item</strong>
+                }
+            </div>
+        </div>
+
+    }
 </div>
