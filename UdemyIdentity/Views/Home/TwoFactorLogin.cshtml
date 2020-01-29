@@ -1,0 +1,62 @@
+﻿@model TwoFactorLoginViewModel
+
+@{
+    ViewData["Title"] = "TwoFactorLogin";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+
+    <div class="col-md-4  offset-md-4">
+
+        <h4>İki Adımlı Kimlik Doğrulama</h4>
+        <hr />
+
+        <form asp-action="TwoFactorLogin" method="post">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="VerificationCode"></label>
+                <input asp-for="VerificationCode" class="form-control" />
+                <span asp-validation-for="VerificationCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+
+                <input type="checkbox" asp-for="isRememberMe" /> Beni Hatırla
+            </div>
+
+            @if (Model.TwoFactorType == TwoFactor.MicrosoftGoogle)
+            {
+                <div class="form-group">
+
+                    <input type="checkbox" asp-for="isRecoverCode" /> Kurtarma kodu girmek için bu kutucuğu işaretleyiniz.
+                </div>
+            }
+
+            <div class="form-group">
+
+                <input type="submit" class="btn btn-success" value="Gönder" />
+            </div>
+        </form>
+
+        <div class="alert alert-info">
+
+            @switch (Model.TwoFactorType)
+            {
+
+                case TwoFactor.Phone:
+                    <span>Telefonunuza gelen sms kodunu bu alana  giriniz.</span>
+                    break;
+                case TwoFactor.Email:
+                    <span>Email adresinize gelen kodu bu alana  giriniz.</span>
+                    break;
+                case TwoFactor.MicrosoftGoogle:
+                    <span>Microsoft/Google Authenticator uygulamanızdaki kodu bu alana giriniz.</span>
+                    break;
+                default:
+                    break;
+            }
+        </div>
+    </div>
+</div>
