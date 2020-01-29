@@ -26,7 +26,7 @@ namespace UdemyIdentity.Controllers
             return View();
         }
 
-        public IActionResult LogIn(string ReturnUrl)
+        public IActionResult LogIn(string ReturnUrl = "/")
         {
             TempData["ReturnUrl"] = ReturnUrl;
 
@@ -55,20 +55,23 @@ namespace UdemyIdentity.Controllers
                         return View(userlogin);
                     }
 
-                    await signInManager.SignOutAsync();
+                    bool userCheck = await userManager.CheckPasswordAsync(user, userlogin.Password);
 
-                    Microsoft.AspNetCore.Identity.SignInResult result = await signInManager.PasswordSignInAsync(user, userlogin.Password, userlogin.RememberMe, false);
-
-                    if (result.Succeeded)
+                    if (userCheck)
                     {
                         await userManager.ResetAccessFailedCountAsync(user);
+                        await signInManager.SignOutAsync();
 
-                        if (TempData["ReturnUrl"] != null)
+                        var result = await signInManager.PasswordSignInAsync(user, userlogin.Password, userlogin.RememberMe, false);
+
+                        if (result.RequiresTwoFactor)
+                        {
+                            return RedirectToAction("TwoFactorLogIn");
+                        }
+                        else
                         {
                             return Redirect(TempData["ReturnUrl"].ToString());
                         }
-
-                        return RedirectToAction("Index", "Member");
                     }
                     else
                     {
