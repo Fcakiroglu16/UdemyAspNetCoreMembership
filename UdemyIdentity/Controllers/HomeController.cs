@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using UdemyIdentity.Enums;
 using UdemyIdentity.Models;
 using UdemyIdentity.ViewModes;
 
@@ -98,6 +99,21 @@ namespace UdemyIdentity.Controllers
             }
 
             return View(userlogin);
+        }
+
+        public async Task<IActionResult> TwoFactorLogin(string ReturnUrl = "/")
+        {
+            var user = await signInManager.GetTwoFactorAuthenticationUserAsync();
+
+            TempData["ReturnUrl"] = ReturnUrl;
+
+            switch ((TwoFactor)user.TwoFactor)
+            {
+                case TwoFactor.MicrosoftGoogle:
+                    break;
+            }
+
+            return View(new TwoFactorLoginViewModel() { TwoFactorType = (TwoFactor)user.TwoFactor, isRecoverCode = false, isRememberMe = false, VerificationCode = string.Empty });
         }
 
         public IActionResult SignUp()
