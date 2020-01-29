@@ -243,6 +243,12 @@ namespace UdemyIdentity.Controllers
             return View(authenticatorViewModel);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> TwoFactorWithAuthenticator(AuthenticatorViewModel authenticatorVM)
+        {
+            return View();
+        }
+
         public IActionResult TwoFactorAuth()
         {
             return View(new AuthenticatorViewModel() { TwoFactorType = (TwoFactor)CurrentUser.TwoFactor });
@@ -260,6 +266,13 @@ namespace UdemyIdentity.Controllers
 
                     TempData["message"] = "İki adımlı kimlik doğrulama tipiniz hiçbiri olarak belirlenmiştir.";
 
+                    break;
+
+                case TwoFactor.MicrosoftGoogle:
+
+                    return RedirectToAction("TwoFactorWithAuthenticator");
+
+                default:
                     break;
             }
 
