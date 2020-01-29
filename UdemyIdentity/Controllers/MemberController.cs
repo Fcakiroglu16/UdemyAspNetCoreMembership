@@ -221,7 +221,7 @@ namespace UdemyIdentity.Controllers
 
         public IActionResult TwoFactorAuth()
         {
-            return View();
+            return View(new AuthenticatorViewModel() { TwoFactorType = (TwoFactor)CurrentUser.TwoFactor });
         }
     }
 }
