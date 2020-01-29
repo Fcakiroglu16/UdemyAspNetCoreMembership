@@ -17,6 +17,7 @@ namespace UdemyIdentity.ViewModes
         [Required(ErrorMessage = "Doğrulama kodu gereklidir")]
         public string VerificationCode { get; set; }
 
+        [Display(Name = "İki adımlı kimlik doğrulama tipi")]
         public TwoFactor TwoFactorType { get; set; }
     }
 }
