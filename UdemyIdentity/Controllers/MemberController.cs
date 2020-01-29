@@ -11,6 +11,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using UdemyIdentity.Enums;
 using UdemyIdentity.Models;
+using UdemyIdentity.Service;
 using UdemyIdentity.ViewModes;
 
 namespace UdemyIdentity.Controllers
@@ -18,8 +19,11 @@ namespace UdemyIdentity.Controllers
     [Authorize]
     public class MemberController : BaseController
     {
-        public MemberController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager) : base(userManager, signInManager)
+        private readonly TwoFactorService _twoFactorService;
+
+        public MemberController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, TwoFactorService twoFactorService) : base(userManager, signInManager)
         {
+            _twoFactorService = twoFactorService;
         }
 
         public IActionResult Index()
@@ -217,6 +221,26 @@ namespace UdemyIdentity.Controllers
         public IActionResult Exchange()
         {
             return View();
+        }
+
+        public async Task<IActionResult> TwoFactorWithAuthenticator()
+        {
+            string unformattedKey = await userManager.GetAuthenticatorKeyAsync(CurrentUser);
+
+            if (string.IsNullOrEmpty(unformattedKey))
+            {
+                await userManager.ResetAuthenticatorKeyAsync(CurrentUser);
+
+                unformattedKey = await userManager.GetAuthenticatorKeyAsync(CurrentUser);
+            }
+
+            AuthenticatorViewModel authenticatorViewModel = new AuthenticatorViewModel();
+
+            authenticatorViewModel.SharedKey = unformattedKey;
+
+            authenticatorViewModel.AuthenticatorUri = _twoFactorService.GenerateQrCodeUri(CurrentUser.Email, unformattedKey);
+
+            return View(authenticatorViewModel);
         }
 
         public IActionResult TwoFactorAuth()
