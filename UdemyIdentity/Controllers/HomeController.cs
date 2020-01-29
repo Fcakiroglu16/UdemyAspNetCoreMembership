@@ -117,6 +117,7 @@ namespace UdemyIdentity.Controllers
                 user.UserName = userViewModel.UserName;
                 user.Email = userViewModel.Email;
                 user.PhoneNumber = userViewModel.PhoneNumber;
+                user.TwoFactor = 0;
 
                 IdentityResult result = await userManager.CreateAsync(user, userViewModel.Password);
 

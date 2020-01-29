@@ -1,8 +1,36 @@
-﻿
+﻿@model AuthenticatorViewModel
 @{
     ViewData["Title"] = "TwoFactorAuth";
     Layout = "~/Views/Member/_MemberLayout.cshtml";
 }
 
-<h1>TwoFactorAuth</h1>
+<h2>İki Adımlı Kimlik Doğrulama</h2>
+<div class="row">
+    <div class="col-md-12">
 
+        <form asp-action="TwoFactorAuth" method="post">
+
+            <div class="form-group">
+
+                <label asp-for="TwoFactorType" class="control-label"></label>
+                <select class="form-control" asp-for="TwoFactorType" asp-items="Html.GetEnumSelectList<TwoFactor>()"></select>
+            </div>
+
+            <div class="form-group">
+
+                <input type="submit" value="Güncelle" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+
+    @if (ViewBag.warning != null)
+    {
+        <div class="col-md-12">
+
+            <div class="alert alert-warning">
+                @ViewBag.warning
+            </div>
+        </div>
+
+    }
+</div>
