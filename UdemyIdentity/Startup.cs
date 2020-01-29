@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using UdemyIdentity.CustomValidation;
 using UdemyIdentity.Models;
 using Microsoft.Extensions.Hosting;
+using UdemyIdentity.Service;
 
 namespace UdemyIdentity
 {
@@ -24,6 +25,8 @@ namespace UdemyIdentity
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<TwoFactorService>();
+
             services.AddTransient<IAuthorizationHandler, ExpireDateExchangeHandler>();
             services.AddDbContext<AppIdentityDbContext>(opts =>
             {
