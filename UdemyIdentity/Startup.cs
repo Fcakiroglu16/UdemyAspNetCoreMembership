@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using UdemyIdentity.CustomValidation;
 using UdemyIdentity.Models;
+using Microsoft.Extensions.Hosting;
 
 namespace UdemyIdentity
 {
@@ -101,7 +102,12 @@ namespace UdemyIdentity
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseDeveloperExceptionPage();
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseBrowserLink();
+            }
+
             app.UseStatusCodePages();
             app.UseStaticFiles();
 

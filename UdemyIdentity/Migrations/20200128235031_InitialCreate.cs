@@ -1,10 +1,9 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace UdemyIdentity.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -44,7 +43,8 @@ namespace UdemyIdentity.Migrations
                     City = table.Column<string>(nullable: true),
                     Picture = table.Column<string>(nullable: true),
                     BirthDay = table.Column<DateTime>(nullable: true),
-                    Gender = table.Column<int>(nullable: false)
+                    Gender = table.Column<int>(nullable: false),
+                    TwoFactor = table.Column<short>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -56,7 +56,7 @@ namespace UdemyIdentity.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     RoleId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -77,7 +77,7 @@ namespace UdemyIdentity.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
