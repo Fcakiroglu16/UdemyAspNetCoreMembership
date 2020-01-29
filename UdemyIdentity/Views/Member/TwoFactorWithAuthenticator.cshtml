@@ -3,6 +3,24 @@
     ViewData["Title"] = "TwoFactorWithAuthenticator";
     Layout = "~/Views/Member/_MemberLayout.cshtml";
 }
+@section Scripts
+{
+
+    <script type="text/javascript">
+
+    var uri = "@Model.AuthenticatorUri";
+
+    new QRCode(document.getElementById("qrcode"), {
+
+        text: uri,
+        width: 150,
+        height: 150,
+        correctLevel: QRCode.CorrectLevel.H
+
+    });
+    </script>
+
+}
 
 <h2>İki Adımlı Kimlik Doğrulama </h2>
 <div class="row">
@@ -16,6 +34,9 @@
 
         <strong class="text-danger">Key:</strong><strong class="text-primary">@Model.SharedKey</strong>
 
+        <hr />
+
+        <div id="qrcode"></div>
         <div class="alert alert-info mt-3">
             2. Adım : Telefonunuzdaki kodu aşağıdaki alana giriniz.
         </div>
