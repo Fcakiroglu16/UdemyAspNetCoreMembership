@@ -116,6 +116,45 @@ namespace UdemyIdentity.Controllers
             return View(new TwoFactorLoginViewModel() { TwoFactorType = (TwoFactor)user.TwoFactor, isRecoverCode = false, isRememberMe = false, VerificationCode = string.Empty });
         }
 
+        [HttpPost]
+        public async Task<IActionResult> TwoFactorLogin(TwoFactorLoginViewModel twoFactorLoginView)
+        {
+            var user = await signInManager.GetTwoFactorAuthenticationUserAsync();
+
+            ModelState.Clear();
+            bool isSuccessAuth = false;
+
+            if ((TwoFactor)user.TwoFactor == TwoFactor.MicrosoftGoogle)
+            {
+                Microsoft.AspNetCore.Identity.SignInResult result;
+
+                if (twoFactorLoginView.isRecoverCode)
+                {
+                    result = await signInManager.TwoFactorRecoveryCodeSignInAsync(twoFactorLoginView.VerificationCode);
+                }
+                else
+                {
+                    result = await signInManager.TwoFactorAuthenticatorSignInAsync(twoFactorLoginView.VerificationCode, twoFactorLoginView.isRememberMe, false);
+                }
+                if (result.Succeeded)
+                {
+                    isSuccessAuth = true;
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Doğrulama kodu yanlış");
+                }
+            }
+
+            if (isSuccessAuth)
+            {
+                return Redirect(TempData["ReturnUrl"].ToString());
+            }
+            twoFactorLoginView.TwoFactorType = (TwoFactor)user.TwoFactor;
+
+            return View(twoFactorLoginView);
+        }
+
         public IActionResult SignUp()
         {
             return View();
