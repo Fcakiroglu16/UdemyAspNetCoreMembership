@@ -19,10 +19,13 @@ namespace UdemyIdentity.Controllers
 
         private readonly EmailSender _emailSender;
 
-        public HomeController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, TwoFactorService twoFactorService, EmailSender emailSender) : base(userManager, signInManager)
+        private readonly SmsSender _smsSender;
+
+        public HomeController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, TwoFactorService twoFactorService, EmailSender emailSender, SmsSender smsSender) : base(userManager, signInManager)
         {
             _twoFactorService = twoFactorService;
             _emailSender = emailSender;
+            _smsSender = smsSender;
         }
 
         public IActionResult Index()
@@ -121,9 +124,6 @@ namespace UdemyIdentity.Controllers
 
             switch ((TwoFactor)user.TwoFactor)
             {
-                case TwoFactor.MicrosoftGoogle:
-                    break;
-
                 case TwoFactor.Email:
 
                     if (_twoFactorService.TimeLeft(HttpContext) == 0)
@@ -135,6 +135,18 @@ namespace UdemyIdentity.Controllers
 
                     HttpContext.Session.SetString("codeVerification", _emailSender.Send(user.Email));
 
+                    break;
+
+                case TwoFactor.Phone:
+
+                    if (_twoFactorService.TimeLeft(HttpContext) == 0)
+                    {
+                        return RedirectToAction("Login");
+                    }
+
+                    ViewBag.timeLeft = _twoFactorService.TimeLeft(HttpContext);
+
+                    HttpContext.Session.SetString("codeVerification", _smsSender.Send(user.PhoneNumber));
                     break;
             }
 
