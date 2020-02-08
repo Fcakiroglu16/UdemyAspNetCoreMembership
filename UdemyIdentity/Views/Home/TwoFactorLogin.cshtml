@@ -4,7 +4,41 @@
     ViewData["Title"] = "TwoFactorLogin";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@section Scripts{
+    <script type="text/javascript">
 
+        $(document).ready(() => {
+
+            var timeLeft = parseInt("@ViewBag.timeLeft");
+
+            function makeTimer() {
+
+                //80  1:20 saniye
+                //40  0:40 saniye
+
+                var minutes = Math.floor(timeLeft / 60);
+                var seconds = Math.floor(timeLeft - (minutes * 60));
+
+                if (minutes < 10) { minutes = "0" + minutes };
+                if (seconds < 10) { seconds = "0" + seconds };
+
+                $("#minutes").html(minutes);
+                $("#seconds").html(seconds);
+                timeLeft--
+                if (timeLeft == 0) {
+                    window.location.href = "/Home/Login";
+                }
+
+            }
+
+            makeTimer();
+
+            setInterval(() => makeTimer(), 1000);
+
+        });
+    </script>
+
+}
 <div class="row">
 
     <div class="col-md-4  offset-md-4">
@@ -39,6 +73,16 @@
                 <input type="submit" class="btn btn-success" value="Gönder" />
             </div>
         </form>
+
+        @if (Model.TwoFactorType == TwoFactor.Email || Model.TwoFactorType == TwoFactor.Phone)
+        {
+
+            <div class="alert alert-primary">
+
+                <span class="text-primary" id="minutes"></span> dakika <span class="text-primary" id="seconds"></span>  kaldı
+            </div>
+
+        }
 
         <div class="alert alert-info">
 
