@@ -11,6 +11,7 @@ using UdemyIdentity.CustomValidation;
 using UdemyIdentity.Models;
 using Microsoft.Extensions.Hosting;
 using UdemyIdentity.Service;
+using System;
 
 namespace UdemyIdentity
 {
@@ -100,6 +101,12 @@ namespace UdemyIdentity
 
             services.AddScoped<IClaimsTransformation, ClaimProvider.ClaimProvider>();
 
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.Name = "MainSession";
+            });
+
             services.AddControllersWithViews();
         }
 
@@ -118,6 +125,7 @@ namespace UdemyIdentity
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseSession();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
