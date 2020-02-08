@@ -7,6 +7,31 @@
 @section Scripts{
     <script type="text/javascript">
 
+        $("#sendEmail").click(() => {
+
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                url: "./AgainSendEmail",
+                dataType: "json",
+                success: function (response) {
+
+                    if (response == true) {
+                        alert("Doğrulama kodu tekrar email adresinize gönderilmiştir.")
+                    }
+                    else {
+                        alert("Bir hata meydana geldi")
+                    }
+
+                },
+                error: function () {
+                    alert("Bir hata meydana geldi");
+                }
+
+            })
+
+        })
+
         $(document).ready(() => {
 
             var timeLeft = parseInt("@ViewBag.timeLeft");
@@ -71,6 +96,12 @@
             <div class="form-group">
 
                 <input type="submit" class="btn btn-success" value="Gönder" />
+
+                @if (Model.TwoFactorType == TwoFactor.Email)
+                {
+
+                    <input class="btn btn-primary" type="button" id="sendEmail" value="Tekrar email gönder" />
+                }
             </div>
         </form>
 

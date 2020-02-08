@@ -464,5 +464,23 @@ namespace UdemyIdentity.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        public JsonResult AgainSendEmail()
+        {
+            try
+            {
+                var user = signInManager.GetTwoFactorAuthenticationUserAsync().Result;
+
+                HttpContext.Session.SetString("codeVerification", _emailSender.Send(user.Email));
+                return Json(true);
+            }
+            catch (Exception)
+            {
+                //loglama yap
+
+                return Json(false);
+            }
+        }
     }
 }
