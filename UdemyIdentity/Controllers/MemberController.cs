@@ -288,6 +288,20 @@ namespace UdemyIdentity.Controllers
 
                     break;
 
+                case TwoFactor.Phone:
+
+                    if (string.IsNullOrEmpty(CurrentUser.PhoneNumber))
+                    {
+                        ViewBag.warning = "Telefon numaranız belirtilmemiştir. Lütfen kullanıcı güncelleme sayfasından telefon numaranızı belirtiniz.";
+                    }
+
+                    CurrentUser.TwoFactorEnabled = true;
+
+                    CurrentUser.TwoFactor = (sbyte)TwoFactor.Phone;
+                    TempData["message"] = "İki adımlı kimlik doğrulama tipimiz telefon olarak belirlenmiştir";
+
+                    break;
+
                 case TwoFactor.Email:
 
                     CurrentUser.TwoFactorEnabled = true;
