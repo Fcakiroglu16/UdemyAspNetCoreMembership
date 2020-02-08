@@ -28,6 +28,7 @@ namespace UdemyIdentity
         {
             services.Configure<TwoFactorOptions>(configuration.GetSection("TwoFactorOptions"));
             services.AddScoped<TwoFactorService>();
+            services.AddScoped<EmailSender>();
 
             services.AddTransient<IAuthorizationHandler, ExpireDateExchangeHandler>();
             services.AddDbContext<AppIdentityDbContext>(opts =>
