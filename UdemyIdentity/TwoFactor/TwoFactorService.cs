@@ -15,6 +15,12 @@ namespace UdemyIdentity.Service
             _urlEncoder = urlEncoder;
         }
 
+        public int GetCodeVerification()
+        {
+            Random rnd = new Random();
+            return rnd.Next(1000, 9999);
+        }
+
         public string GenerateQrCodeUri(string email, string unformattedKey)
 
         {
