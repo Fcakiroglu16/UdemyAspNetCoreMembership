@@ -25,6 +25,7 @@ namespace UdemyIdentity
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<TwoFactorOptions>(configuration.GetSection("TwoFactorOptions"));
             services.AddScoped<TwoFactorService>();
 
             services.AddTransient<IAuthorizationHandler, ExpireDateExchangeHandler>();
