@@ -25,7 +25,7 @@ namespace UdemyIdentity.Service
 
             //SMS PROVIDER CODES
 
-            return code;
+            return "2222";
         }
     }
 }
