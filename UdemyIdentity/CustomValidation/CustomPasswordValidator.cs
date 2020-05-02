@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UdemyIdentity.Models;
 
@@ -13,7 +14,7 @@ namespace UdemyIdentity.CustomValidation
 
             if (password.ToLower().Contains(user.UserName.ToLower()))
             {
-                if (!user.Email.Contains(user.UserName))
+                if (!password.ToLower().Contains(user.Email.ToLower()))
                 {
                     errors.Add(new IdentityError() { Code = "PasswordContainsUserName", Description = "şifre alanı kullanıcı adı içeremez" });
                 }

@@ -107,7 +107,7 @@ namespace UdemyIdentity.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (userManager.Users.Any(u => u.PhoneNumber == userViewModel.PhoneNumber))
+                if (!String.IsNullOrEmpty(userViewModel.PhoneNumber) && userManager.Users.Any(u => u.PhoneNumber == userViewModel.PhoneNumber))
                 {
                     ModelState.AddModelError("", "Bu telefon numarası kayıtlıdır.");
                     return View(userViewModel);
@@ -132,7 +132,7 @@ namespace UdemyIdentity.Controllers
 
                     );
 
-                    Helper.EmailConfirmation.SendEmail(link, user.Email);
+                    // Helper.EmailConfirmation.SendEmail(link, user.Email);
 
                     return RedirectToAction("LogIn");
                 }
