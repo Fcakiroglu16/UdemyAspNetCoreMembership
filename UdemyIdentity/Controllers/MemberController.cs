@@ -122,7 +122,7 @@ namespace UdemyIdentity.Controllers
                 {
                     IdentityResult result = userManager.ChangePasswordAsync(user, passwordChangeViewModel.PasswordOld, passwordChangeViewModel.PasswordNew).Result;
 
-                    if (result.Succeeded)
+                    if (result.Succeeded && passwordChangeViewModel.PasswordOld != passwordChangeViewModel.PasswordNew)
                     {
                         await userManager.UpdateSecurityStampAsync(user);
                         await signInManager.SignOutAsync();
@@ -133,7 +133,15 @@ namespace UdemyIdentity.Controllers
                     }
                     else
                     {
-                        AddModelError(result);
+                        if (passwordChangeViewModel.PasswordOld == passwordChangeViewModel.PasswordNew)
+                        {
+                            ModelState.AddModelError("", "Eski şifreden farklı bir şifre giriniz.");
+                        }
+                        else
+                        {
+                            AddModelError(result);
+                        }
+
                     }
                 }
                 else
